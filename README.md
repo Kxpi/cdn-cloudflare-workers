@@ -38,7 +38,7 @@ Fill out the placeholders in `wrangler.jsonc` file:
 ```
 
 ## Deployment
-If you have set up your Cloudflare resourcers and `wrangler.jsonc` file, clone the repo and run the following:
+If you have set up your Cloudflare resourcers and `wrangler.jsonc` file, run the following:
 ```
 npm ci
 npm run deploy
