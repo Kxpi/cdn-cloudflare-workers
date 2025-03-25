@@ -91,7 +91,7 @@ It's possible to pass below parameters to perform some basic image transformatio
 
 🟠 `q` - image quality, ex. 50, 85 [%]
 
-🟠 `w` - image format, ex. png, webp, jpg, json
+🟠 `f` - image format, ex. png, webp, jpg, json
 
 ```
 # Convert to WebP
