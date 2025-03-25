@@ -16,6 +16,10 @@ export async function checkRateLimit(request: Request, env: Env): Promise<Respon
 	const rateLimitKey = `ratelimit:${clientIP}`;
 	const currentRequests = parseInt((await env.KV.get(rateLimitKey)) || '0');
 
+	await env.KV.put(rateLimitKey, (currentRequests + 1).toString(), {
+		expirationTtl: 60,
+	})
+
 	if (currentRequests > 500) {
 		return new Response('Rate limit exceeded', { status: 429 });
 	}
