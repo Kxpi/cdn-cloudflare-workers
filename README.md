@@ -95,13 +95,13 @@ It's possible to pass below parameters to perform some basic image transformatio
 
 ```
 # Convert to WebP
-https:///<workers-url>/image.jpg?f=webp
+https://<workers-url>/image.jpg?f=webp
 
 # Resize to 800px width and convert to avif
-https:///<workers-url>/image.jpg?w=800&f=avif
+https://<workers-url>/image.jpg?w=800&f=avif
 
 # Get image metadata
-https:///<workers-url>/image.jpg?f=json
+https://<workers-url>/image.jpg?f=json
 ```
 
 #### Cache
