@@ -138,7 +138,8 @@ curl -X GET ""https://<workers-url>/file.png"
 	--output path/to/output.png
 ```
 
-
+## Cloudflare dashboard
+You don't have to use requests via `curl` or in any programming language of your choice to manage the pictures. You can always use the UI available in your Cloudflare account and add/delete pictures there, via R2 dashboard.
 
 ____
 
