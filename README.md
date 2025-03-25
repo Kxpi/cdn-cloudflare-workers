@@ -1,5 +1,7 @@
 # cdn-cloudflare-workers
-Simple CDN-like service for image storage, binded with KV and R2 services from Cloudflare. It's an easy to setup, API-based solution to fetch and upload pictures (GET & PUT) which is basically free if you stay within a generous free tier of 100,000 requests per day and don't exceed 10GB of R2 storage. Comes with auth via api token, rate limiting and basic caching capabilities. Inspired by [this article](https://transloadit.com/devtips/creating-a-free-image-cdn-with-cloudflare-r2/).
+Simple CDN-like service for image storage, binded with KV and R2 services from Cloudflare. It's an easy to setup, API-based solution to fetch and upload pictures (GET & PUT) which is basically free if you stay within a generous free tier of 100,000 requests per day and don't exceed 10GB of R2 storage. Comes with auth via api token, rate limiting, image transformations and basic caching capabilities. 
+
+Inspired by [this article](https://transloadit.com/devtips/creating-a-free-image-cdn-with-cloudflare-r2/).
 
 ## Prerequisites
 Before you bring this bad boy up and running, you need to go through these points:
@@ -80,12 +82,35 @@ REQUIRE_AUTH_PUT=true
 ```
 So that only PUT request will require the token.
 
+#### Image transformations
+It's possible to pass below parameters to perform some basic image transformations:
+
+🟠 `w` - image width, ex. 600, 1200 [px]
+
+🟠 `h` - image height, ex. 600, 1200 [px]
+
+🟠 `q` - image quality, ex. 50, 85 [%]
+
+🟠 `w` - image format, ex. png, webp, jpg, json
+
+```
+# Convert to WebP
+https:///<workers-url>/image.jpg?f=webp
+
+# Resize to 800px width and convert to avif
+https:///<workers-url>/image.jpg?w=800&f=avif
+
+# Get image metadata
+https:///<workers-url>/image.jpg?f=json
+```
+
 #### Cache
 Images are cached at two levels:
 
 🟠 Browser Cache: Using Cache-Control: public, max-age=31536000 (1 year)
 
 🟠 Cloudflare's Edge Cache: Automatically caches assets at Cloudflare's edge locations.
+
 
 ## Example usage (without auth)
 ```
@@ -112,7 +137,6 @@ curl -X GET ""https://<workers-url>/file.png"
 	-H "Authorization: Bearer YOUR_API_TOKEN" \
 	--output path/to/output.png
 ```
-
 
 
 
