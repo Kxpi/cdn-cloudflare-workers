@@ -28,12 +28,6 @@ async function handleFetch(request: Request, env: Env) {
 		const url = new URL(request.url)
 		const path = url.pathname.slice(1)
 
-		// Parse image transformation parameters
-		const width = url.searchParams.get('w')
-		const height = url.searchParams.get('h')
-		const quality = url.searchParams.get('q') || '85'
-		const format = url.searchParams.get('f') || 'auto'
-
 		const object = await env.BUCKET.get(path)
 
 		if (!object) {
@@ -45,16 +39,7 @@ async function handleFetch(request: Request, env: Env) {
 		headers.set('Content-Type', object.httpMetadata?.contentType || 'image/jpeg')
 
 		return new Response(object.body, {
-			headers,
-			cf: {
-				image: {
-					fit: 'scale-down',
-					width: width ? parseInt(width) : undefined,
-					height: height ? parseInt(height) : undefined,
-					quality: parseInt(quality),
-					format,
-				},
-			},
+			headers
 		})
 	} catch (err) {
 
