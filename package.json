@@ -15,5 +15,8 @@
 		"typescript": "^5.5.2",
 		"vitest": "~3.0.7",
 		"wrangler": "^4.4.0"
+	},
+	"dependencies": {
+		"@cf-wasm/photon": "^0.1.29"
 	}
 }
