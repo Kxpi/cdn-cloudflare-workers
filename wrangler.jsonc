@@ -40,7 +40,9 @@
 	"vars": {
 		"API_TOKEN": "<token>",
 		"REQUIRE_AUTH_GET": "<true|false>",
-		"REQUIRE_AUTH_PUT": "<true|false>"
+		"REQUIRE_AUTH_PUT": "<true|false>",
+		"CACHE_BROWSER_SECONDS": "31536000",
+		"RATE_LIMIT": "500"
 	},
 	/**
 	 * Note: Use secrets to store sensitive data.
