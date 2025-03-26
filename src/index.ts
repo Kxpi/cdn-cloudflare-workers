@@ -8,7 +8,7 @@
  * Learn more at https://developers.cloudflare.com/workers/
  */
 
-import { checkRateLimit, authenticate } from "./utils";
+import { checkRateLimit, authenticate, processImage } from "./utils";
 
 // GET
 async function handleFetch(request: Request, env: Env) {
@@ -28,17 +28,42 @@ async function handleFetch(request: Request, env: Env) {
 		const url = new URL(request.url)
 		const path = url.pathname.slice(1)
 
+		// Parse image transformation parameters
+		const width = url.searchParams.get('w')
+			? parseInt(url.searchParams.get('w')!)
+			: null;
+		const height = url.searchParams.get('h')
+			? parseInt(url.searchParams.get('h')!)
+			: null;
+		const quality = url.searchParams.get('q')
+			? parseInt(url.searchParams.get('q')!)
+			: null;
+		const format = url.searchParams.get('f') || 'auto';
+
+		// Retrieve file from R2
 		const object = await env.BUCKET.get(path)
 
 		if (!object) {
 			return new Response('Resource not found', { status: 404 })
 		}
 
-		const headers = new Headers()
-		headers.set('Cache-Control', 'public, max-age=31536000')
-		headers.set('Content-Type', object.httpMetadata?.contentType || 'image/jpeg')
+		// Get the image buffer
+		const imageBuffer = await object.arrayBuffer();
 
-		return new Response(object.body, {
+		//Process image
+		const { buffer, contentType } = await processImage(imageBuffer, {
+			width,
+			height,
+			quality,
+			format,
+			originalContentType: object.httpMetadata?.contentType?.split('/')[1] || 'jpeg'
+		});
+
+		const headers = new Headers()
+		headers.set('Cache-Control', `public, max-age=${env.CACHE_BROWSER_SECONDS}`)
+		headers.set('Content-Type', contentType)
+
+		return new Response(buffer, {
 			headers
 		})
 	} catch (err) {
